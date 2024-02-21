@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace ToDoList.Models
+namespace SweetTreat.Models
 {
     public class ApplicationUser : IdentityUser
     {
