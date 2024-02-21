@@ -11,6 +11,7 @@ using System.Security.Claims;
 
 namespace SweetTreat.Controllers
 {
+  [Authorize]
   public class TreatsController : Controller
   {
     private readonly SweetTreatContext _db;
@@ -22,15 +23,17 @@ namespace SweetTreat.Controllers
       _db = db;
     }
 
-    public ActionResult Index()
+    public async Task<ActionResult> Index()
     {
-      List<Treat> model = _db.Treats
-                            .Include(treat => treat.Flavor)
-                            .ToList();
-      return View(model);
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      List<Treat> userTreats = _db.Treats
+                          .Where(entry => entry.User.Id == currentUser.Id)
+                          .Include(treat => treat.Flavor)
+                          .ToList();
+      return View(userTreats);
     }
 
-    [Authorize]
     public ActionResult Create()
     {
       ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
@@ -66,7 +69,6 @@ namespace SweetTreat.Controllers
       return View(thisTreat);
     }
 
-    [Authorize]
     public ActionResult Edit(int id)
     {
       Treat thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
@@ -82,7 +84,6 @@ namespace SweetTreat.Controllers
       return RedirectToAction("Index");
     }
 
-    [Authorize]
     public ActionResult Delete(int id)
     {
       Treat thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
@@ -98,7 +99,6 @@ namespace SweetTreat.Controllers
       return RedirectToAction("Index");
     }
 
-    [Authorize]
     public ActionResult AddFlavor(int id)
     {
       Treat thisTreat = _db.Treats.FirstOrDefault(treats => treats.TreatId == id);
