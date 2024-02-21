@@ -80,7 +80,7 @@ namespace SweetTreat.Controllers
 
     public ActionResult Delete(int id)
     {
-      Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavors => flaovrs.FlavorId == id);
+      Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavors => flavors.FlavorId == id);
       return View(thisFlavor);
     }
 
