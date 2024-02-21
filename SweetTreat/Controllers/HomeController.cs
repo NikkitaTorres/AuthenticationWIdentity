@@ -23,17 +23,12 @@ namespace SweetTreat.Controllers
       public async Task<ActionResult> Index()
       {
         Flavor[] flavors = _db.Flavors.ToArray();
+        Treat[] treats = _db.Treats.ToArray();
         Dictionary<string,object[]> model = new Dictionary<string, object[]>();
         model.Add("flavors", flavors);
+        model.Add("treats", treats);
         string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-        if (currentUser != null)
-        {
-          Treat[] treats = _db.Treats
-                      .Where(entry => entry.User.Id == currentUser.Id)
-                      .ToArray();
-          model.Add("treats", treats);
-        }
         return View(model);
       }
     }

@@ -11,7 +11,6 @@ using System.Security.Claims;
 
 namespace SweetTreat.Controllers
 {
-  [Authorize]
   public class TreatsController : Controller
   {
     private readonly SweetTreatContext _db;
@@ -34,6 +33,7 @@ namespace SweetTreat.Controllers
       return View(userTreats);
     }
 
+    [Authorize]
     public ActionResult Create()
     {
       ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
@@ -69,6 +69,7 @@ namespace SweetTreat.Controllers
       return View(thisTreat);
     }
 
+    [Authorize]
     public ActionResult Edit(int id)
     {
       Treat thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
@@ -84,6 +85,7 @@ namespace SweetTreat.Controllers
       return RedirectToAction("Index");
     }
 
+    [Authorize]
     public ActionResult Delete(int id)
     {
       Treat thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
@@ -99,6 +101,7 @@ namespace SweetTreat.Controllers
       return RedirectToAction("Index");
     }
 
+    [Authorize]
     public ActionResult AddFlavor(int id)
     {
       Treat thisTreat = _db.Treats.FirstOrDefault(treats => treats.TreatId == id);
