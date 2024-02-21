@@ -22,15 +22,12 @@ namespace SweetTreat.Controllers
       _db = db;
     }
 
-    public async Task<ActionResult> Index()
+    public ActionResult Index()
     {
-      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      List<Treat> userTreats = _db.Treats
-                          .Where(entry => entry.User.Id == currentUser.Id)
-                          .Include(treat => treat.Flavor)
-                          .ToList();
-      return View(userTreats);
+      List<Treat> model = _db.Treats
+                            .Include(treat => treat.Flavor)
+                            .ToList();
+      return View(model);
     }
 
     [Authorize]
