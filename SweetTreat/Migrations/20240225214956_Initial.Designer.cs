@@ -11,7 +11,7 @@ using SweetTreat.Models;
 namespace SweetTreat.Migrations
 {
     [DbContext(typeof(SweetTreatContext))]
-    [Migration("20240221085449_Initial")]
+    [Migration("20240225214956_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -220,9 +220,15 @@ namespace SweetTreat.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("FlavorId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Flavors");
                 });
@@ -266,7 +272,8 @@ namespace SweetTreat.Migrations
 
                     b.HasKey("TreatId");
 
-                    b.HasIndex("FlavorId");
+                    b.HasIndex("FlavorId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -324,6 +331,15 @@ namespace SweetTreat.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SweetTreat.Models.Flavor", b =>
+                {
+                    b.HasOne("SweetTreat.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SweetTreat.Models.FlavorTreat", b =>
                 {
                     b.HasOne("SweetTreat.Models.Flavor", "Flavor")
@@ -346,8 +362,8 @@ namespace SweetTreat.Migrations
             modelBuilder.Entity("SweetTreat.Models.Treat", b =>
                 {
                     b.HasOne("SweetTreat.Models.Flavor", "Flavor")
-                        .WithMany()
-                        .HasForeignKey("FlavorId")
+                        .WithOne("Treat")
+                        .HasForeignKey("SweetTreat.Models.Treat", "FlavorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -363,6 +379,8 @@ namespace SweetTreat.Migrations
             modelBuilder.Entity("SweetTreat.Models.Flavor", b =>
                 {
                     b.Navigation("JoinEntities");
+
+                    b.Navigation("Treat");
                 });
 
             modelBuilder.Entity("SweetTreat.Models.Treat", b =>

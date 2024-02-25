@@ -22,14 +22,15 @@ namespace SweetTreat.Controllers
       _userManager = userManager;
       _db = db;
     }
-
+    //changed Inlcude from flavor => flavor.Treat, added .ThenInclude (join => join.Treat)
     public async Task<ActionResult> Index()
     {
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       List<Flavor> userFlavors = _db.Flavors
                           .Where(entry => entry.User.Id == currentUser.Id)
-                          .Include(flavor => flavor.Treat)
+                          .Include(flavor => flavor.JoinEntities)
+                          .ThenInclude(join => join.Treat)
                           .ToList();
       return View(userFlavors);
     }
