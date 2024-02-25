@@ -45,7 +45,7 @@ After you are finished with the above steps, in MySQL Workbench, open the "Navig
 
 ## Know bugs
 
-No known bugs at this time.
+Error when creating a 2nd treat with the same flavor as an existing treat.
 
 ## License
 

@@ -52,6 +52,7 @@ namespace SweetTreat.Controllers
       {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
         treat.User = currentUser;
         _db.Treats.Add(treat);
         _db.SaveChanges();

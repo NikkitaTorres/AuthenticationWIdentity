@@ -22,7 +22,7 @@ namespace SweetTreat.Controllers
       _userManager = userManager;
       _db = db;
     }
-    //changed Inlcude from flavor => flavor.Treat, added .ThenInclude (join => join.Treat)
+    
     public async Task<ActionResult> Index()
     {
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -46,7 +46,7 @@ namespace SweetTreat.Controllers
 
     public ActionResult Create()
     {
-      ViewBag.Treat.Id = new SelectList(_db.Treats, "TreatId", "Name");
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
       return View();
     }
 
